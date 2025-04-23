@@ -1,0 +1,132 @@
+[
+  {
+    "model": "cafe.menuitem",
+    "pk": 1,
+    "fields": {
+      "name": "Espresso",
+      "description": "A strong, concentrated shot of coffee with a rich crema",
+      "price": "2.50",
+      "category": 1,
+      "is_available": true,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "cafe.menuitem",
+    "pk": 2,
+    "fields": {
+      "name": "Cappuccino",
+      "description": "Espresso with steamed milk and foam in equal parts",
+      "price": "3.50",
+      "category": 1,
+      "is_available": true,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "cafe.menuitem",
+    "pk": 3,
+    "fields": {
+      "name": "Latte",
+      "description": "Espresso with a generous amount of steamed milk and a small layer of foam",
+      "price": "3.75",
+      "category": 1,
+      "is_available": true,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "cafe.menuitem",
+    "pk": 4,
+    "fields": {
+      "name": "Earl Grey",
+      "description": "Classic black tea flavored with oil of bergamot",
+      "price": "2.75",
+      "category": 2,
+      "is_available": true,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "cafe.menuitem",
+    "pk": 5,
+    "fields": {
+      "name": "Green Tea",
+      "description": "Delicate tea with a fresh, grassy flavor",
+      "price": "2.75",
+      "category": 2,
+      "is_available": true,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "cafe.menuitem",
+    "pk": 6,
+    "fields": {
+      "name": "Croissant",
+      "description": "Buttery, flaky French pastry",
+      "price": "2.95",
+      "category": 3,
+      "is_available": true,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "cafe.menuitem",
+    "pk": 7,
+    "fields": {
+      "name": "Chocolate Muffin",
+      "description": "Rich, moist chocolate muffin with chocolate chips",
+      "price": "3.25",
+      "category": 3,
+      "is_available": true,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "cafe.menuitem",
+    "pk": 8,
+    "fields": {
+      "name": "Turkey Club",
+      "description": "Sliced turkey breast with bacon, lettuce, tomato, and mayonnaise",
+      "price": "7.95",
+      "category": 4,
+      "is_available": true,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "cafe.menuitem",
+    "pk": 9,
+    "fields": {
+      "name": "Veggie Wrap",
+      "description": "Roasted vegetables with hummus in a whole wheat wrap",
+      "price": "6.95",
+      "category": 4,
+      "is_available": true,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "cafe.menuitem",
+    "pk": 10,
+    "fields": {
+      "name": "Avocado Toast",
+      "description": "Smashed avocado on sourdough toast with olive oil and red pepper flakes",
+      "price": "8.50",
+      "category": 5,
+      "is_available": true,
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  }
+]

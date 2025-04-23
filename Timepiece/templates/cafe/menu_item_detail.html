@@ -1,0 +1,140 @@
+{% extends 'base.html' %} {% block title %}{{ menu_item.name }} - Timepiece
+Cafe{% endblock %} {% block content %}
+<div class="container py-5">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{% url 'cafe:home' %}">Home</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="{% url 'cafe:menu' %}">Menu</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="{% url 'cafe:menu_category' menu_item.category.id %}"
+              >{{ menu_item.category.name }}</a
+            >
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            {{ menu_item.name }}
+          </li>
+        </ol>
+      </nav>
+
+      <div class="card shadow-sm">
+        <div class="row g-0">
+          {% if menu_item.image %}
+          <div class="col-md-4">
+            <img
+              src="{{ menu_item.image.url }}"
+              alt="{{ menu_item.name }}"
+              class="img-fluid rounded-start"
+              style="height: 100%; object-fit: cover"
+            />
+          </div>
+          {% endif %}
+          <div class="col-md-{% if menu_item.image %}8{% else %}12{% endif %}">
+            <div class="card-body">
+              <div
+                class="d-flex justify-content-between align-items-start mb-2"
+              >
+                <h1 class="card-title h2 mb-0">{{ menu_item.name }}</h1>
+                <span class="badge bg-primary rounded-pill fs-5"
+                  >€{{ menu_item.price }}</span
+                >
+              </div>
+
+              <div class="mb-3">
+                <span class="badge bg-secondary"
+                  >{{ menu_item.category.name }}</span
+                >
+                {% if menu_item.is_vegetarian %}<span
+                  class="badge bg-success ms-1"
+                  >Vegetarian</span
+                >{% endif %} {% if menu_item.is_vegan %}<span
+                  class="badge bg-success ms-1"
+                  >Vegan</span
+                >{% endif %} {% if menu_item.is_gluten_free %}<span
+                  class="badge bg-warning text-dark ms-1"
+                  >Gluten Free</span
+                >{% endif %}
+              </div>
+
+              <p class="card-text">{{ menu_item.description }}</p>
+
+              <hr />
+
+              <form
+                method="post"
+                action="{% url 'cafe:add_to_cart' menu_item.id %}"
+                class="mt-4"
+              >
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.path }}" />
+
+                <div class="row align-items-end">
+                  <div class="col-md-4">
+                    <label for="quantity" class="form-label">Quantity</label>
+                    <input
+                      type="number"
+                      name="quantity"
+                      id="quantity"
+                      min="1"
+                      value="1"
+                      class="form-control"
+                    />
+                  </div>
+                  <div class="col-md-8">
+                    <button type="submit" class="btn btn-primary w-100">
+                      <i class="bi bi-cart-plus"></i> Add to Cart
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% if related_items %}
+      <div class="mt-5">
+        <h3>You might also like</h3>
+        <div class="row row-cols-1 row-cols-md-2 g-4 mt-2">
+          {% for item in related_items %}
+          <div class="col">
+            <div class="card h-100">
+              {% if item.image %}
+              <img
+                src="{{ item.image.url }}"
+                class="card-img-top"
+                alt="{{ item.name }}"
+                style="height: 180px; object-fit: cover"
+              />
+              {% endif %}
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                  <h5 class="card-title">{{ item.name }}</h5>
+                  <span class="badge bg-primary rounded-pill"
+                    >€{{ item.price }}</span
+                  >
+                </div>
+                <p class="card-text">
+                  {{ item.description|truncatechars:100 }}
+                </p>
+                <a
+                  href="{% url 'cafe:menu_item_detail' item.id %}"
+                  class="btn btn-outline-primary btn-sm"
+                  >View Details</a
+                >
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

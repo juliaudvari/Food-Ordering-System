@@ -1,0 +1,42 @@
+[
+  {
+    "model": "cafe.category",
+    "pk": 1,
+    "fields": {
+      "name": "Coffee",
+      "description": "Various coffee drinks made with our premium beans"
+    }
+  },
+  {
+    "model": "cafe.category",
+    "pk": 2,
+    "fields": {
+      "name": "Tea",
+      "description": "Selection of loose-leaf teas from around the world"
+    }
+  },
+  {
+    "model": "cafe.category",
+    "pk": 3,
+    "fields": {
+      "name": "Pastries",
+      "description": "Freshly baked pastries and desserts"
+    }
+  },
+  {
+    "model": "cafe.category",
+    "pk": 4,
+    "fields": {
+      "name": "Sandwiches",
+      "description": "Gourmet sandwiches made with fresh ingredients"
+    }
+  },
+  {
+    "model": "cafe.category",
+    "pk": 5,
+    "fields": {
+      "name": "Breakfast",
+      "description": "Breakfast options served all day"
+    }
+  }
+]

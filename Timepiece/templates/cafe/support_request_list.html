@@ -1,0 +1,91 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Support Requests -
+TimeKeeper Cafe{% endblock %} {% block content %}
+<div class="container my-5">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="mb-4">Support Requests</h1>
+
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <p>Need help? Our support team is here to assist you.</p>
+        <a
+          href="{% url 'cafe:support_request_create' %}"
+          class="btn btn-primary"
+        >
+          <i class="bi bi-plus-circle"></i> New Support Request
+        </a>
+      </div>
+
+      {% if messages %} {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}" role="alert">
+        {{ message }}
+      </div>
+      {% endfor %} {% endif %} {% if support_requests %}
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Subject</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th>Last Updated</th>
+              {% if user.is_staff %}
+              <th>Customer</th>
+              <th>Assigned To</th>
+              {% endif %}
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for request in support_requests %}
+            <tr>
+              <td>#{{ request.id }}</td>
+              <td>{{ request.subject }}</td>
+              <td>
+                {% if request.status == 'OPEN' %}
+                <span class="badge bg-danger">Open</span>
+                {% elif request.status == 'IN_PROGRESS' %}
+                <span class="badge bg-warning text-dark">In Progress</span>
+                {% elif request.status == 'RESOLVED' %}
+                <span class="badge bg-success">Resolved</span>
+                {% elif request.status == 'CLOSED' %}
+                <span class="badge bg-secondary">Closed</span>
+                {% endif %}
+              </td>
+              <td>{{ request.created_at|date:"M d, Y" }}</td>
+              <td>{{ request.updated_at|date:"M d, Y" }}</td>
+              {% if user.is_staff %}
+              <td>{{ request.customer.username }}</td>
+              <td>
+                {% if request.assigned_to %} {{ request.assigned_to.username }}
+                {% else %}
+                <span class="text-muted">Unassigned</span>
+                {% endif %}
+              </td>
+              {% endif %}
+              <td>
+                <a
+                  href="{% url 'cafe:support_request_detail' request_id=request.id %}"
+                  class="btn btn-sm btn-outline-primary"
+                >
+                  <i class="bi bi-eye"></i> View
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="alert alert-info" role="alert">
+        You don't have any support requests yet.
+        <a href="{% url 'cafe:support_request_create' %}" class="alert-link"
+          >Create one</a
+        >
+        if you need assistance.
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

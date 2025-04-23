@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+
+{% block title %}TimeKeeper Cafe - Menu{% endblock %}
+
+{% block content %}
+<div class="menu-container">
+    <!-- Menu Header -->
+    <section class="menu-header">
+        <div class="container">
+            <h1 class="page-title">Our Menu</h1>
+            <p class="menu-description">Explore our carefully crafted selection of food and beverages, where every item is prepared with precision and care.</p>
+        </div>
+    </section>
+
+    <!-- Menu Filters -->
+    <section class="menu-filters">
+        <div class="container">
+            <form method="get" action="{% url 'cafe:menu' %}" class="filters-form">
+                <div class="filter-group">
+                    <label for="search">Search:</label>
+                    <input type="text" id="search" name="search" value="{{ request.GET.search|default:'' }}" placeholder="Search menu...">
+                </div>
+                
+                <div class="filter-group">
+                    <label for="category">Category:</label>
+                    <select id="category" name="category">
+                        <option value="">All Categories</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:'i' %}selected{% endif %}>{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="filter-group dietary-filters">
+                    <span class="filter-label">Dietary Options:</span>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="vegetarian" name="vegetarian" {% if request.GET.vegetarian %}checked{% endif %}>
+                        <label for="vegetarian">Vegetarian</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="vegan" name="vegan" {% if request.GET.vegan %}checked{% endif %}>
+                        <label for="vegan">Vegan</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="gluten_free" name="gluten_free" {% if request.GET.gluten_free %}checked{% endif %}>
+                        <label for="gluten_free">Gluten Free</label>
+                    </div>
+                </div>
+                
+                <div class="filter-group price-filter">
+                    <label for="price_min">Price Range:</label>
+                    <div class="price-inputs">
+                        <input type="number" id="price_min" name="price_min" min="0" step="0.01" value="{{ request.GET.price_min|default:'' }}" placeholder="Min €">
+                        <span class="price-separator">-</span>
+                        <input type="number" id="price_max" name="price_max" min="0" step="0.01" value="{{ request.GET.price_max|default:'' }}" placeholder="Max €">
+                    </div>
+                </div>
+                
+                <div class="filter-actions">
+                    <button type="submit" class="btn primary">Apply Filters</button>
+                    <a href="{% url 'cafe:menu' %}" class="btn secondary">Clear Filters</a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Menu Items -->
+    <section class="menu-items">
+        <div class="container">
+            {% if active_category %}
+            <h2 class="category-title">{{ active_category.name }}</h2>
+            {% if active_category.description %}
+            <p class="category-description">{{ active_category.description }}</p>
+            {% endif %}
+            {% endif %}
+
+            {% if menu_items %}
+            <div class="menu-grid">
+                {% for item in menu_items %}
+                <div class="menu-item">
+                    <a href="{% url 'cafe:menu_item_detail' item.id %}" class="menu-item-link">
+                        <div class="menu-item-image">
+                            {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                            {% else %}
+                            <div class="placeholder-image"></div>
+                            {% endif %}
+                        </div>
+                        <div class="menu-item-content">
+                            <h3 class="menu-item-name">{{ item.name }}</h3>
+                            <div class="menu-item-meta">
+                                <div class="menu-item-price">€{{ item.price }}</div>
+                                <div class="menu-item-tags">
+                                    {% if item.is_vegetarian %}
+                                    <span class="tag vegetarian" title="Vegetarian">V</span>
+                                    {% endif %}
+                                    {% if item.is_vegan %}
+                                    <span class="tag vegan" title="Vegan">VG</span>
+                                    {% endif %}
+                                    {% if item.is_gluten_free %}
+                                    <span class="tag gluten-free" title="Gluten Free">GF</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <p class="menu-item-description">{{ item.description|truncatechars:100 }}</p>
+                            <div class="menu-item-category">
+                                <span class="category-label">{{ item.category.name }}</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <div class="pagination">
+                <div class="pagination-info">
+                    Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ paginator.count }} items
+                </div>
+                <div class="pagination-controls">
+                    {% if page_obj.has_previous %}
+                    <a href="?{{ request.GET.urlencode }}&page=1" class="pagination-first">&laquo; First</a>
+                    <a href="?{{ request.GET.urlencode }}&page={{ page_obj.previous_page_number }}" class="pagination-prev">&lsaquo; Previous</a>
+                    {% endif %}
+                    
+                    <span class="pagination-current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    
+                    {% if page_obj.has_next %}
+                    <a href="?{{ request.GET.urlencode }}&page={{ page_obj.next_page_number }}" class="pagination-next">Next &rsaquo;</a>
+                    <a href="?{{ request.GET.urlencode }}&page={{ page_obj.paginator.num_pages }}" class="pagination-last">Last &raquo;</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            
+            {% else %}
+            <div class="no-items-message">
+                <p>No menu items found matching your criteria. Please try adjusting your filters.</p>
+                <a href="{% url 'cafe:menu' %}" class="btn secondary">Clear Filters</a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Categories List -->
+    <section class="menu-categories">
+        <div class="container">
+            <h2 class="section-title">Browse by Category</h2>
+            <div class="categories-list">
+                {% for category in categories %}
+                <a href="{% url 'cafe:menu' %}?category={{ category.id }}" class="category-item {% if request.GET.category == category.id|stringformat:'i' %}active{% endif %}">
+                    <div class="category-icon">
+                        {% if category.icon_class %}
+                        <i class="{{ category.icon_class }}"></i>
+                        {% endif %}
+                    </div>
+                    <div class="category-name">{{ category.name }}</div>
+                    <div class="category-count">{{ category.menuitem_set.count }} items</div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Offers -->
+    {% if special_offers %}
+    <section class="special-offers">
+        <div class="container">
+            <h2 class="section-title">Special Offers</h2>
+            <div class="offers-grid">
+                {% for offer in special_offers %}
+                <div class="offer-card">
+                    <div class="offer-image">
+                        {% if offer.image %}
+                        <img src="{{ offer.image.url }}" alt="{{ offer.title }}">
+                        {% endif %}
+                    </div>
+                    <div class="offer-content">
+                        <h3 class="offer-title">{{ offer.title }}</h3>
+                        <p class="offer-description">{{ offer.description }}</p>
+                        {% if offer.expiry_date %}
+                        <div class="offer-expiry">Valid until {{ offer.expiry_date|date:"F d, Y" }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle form submission with Enter key in search field
+        document.getElementById('search').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.querySelector('.filters-form').submit();
+            }
+        });
+        
+        // Auto-submit on category change
+        document.getElementById('category').addEventListener('change', function() {
+            document.querySelector('.filters-form').submit();
+        });
+        
+        // Initialize tooltips for dietary tags
+        const dietaryTags = document.querySelectorAll('.menu-item-tags .tag');
+        dietaryTags.forEach(tag => {
+            // Simple tooltip implementation
+            tag.addEventListener('mouseenter', function(e) {
+                const title = this.getAttribute('title');
+                if (!title) return;
+                
+                const tooltip = document.createElement('div');
+                tooltip.className = 'tooltip';
+                tooltip.textContent = title;
+                document.body.appendChild(tooltip);
+                
+                const rect = this.getBoundingClientRect();
+                tooltip.style.top = (rect.bottom + window.scrollY + 5) + 'px';
+                tooltip.style.left = (rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)) + 'px';
+                
+                this.tooltip = tooltip;
+                this.removeAttribute('title');
+            });
+            
+            tag.addEventListener('mouseleave', function() {
+                if (this.tooltip) {
+                    this.setAttribute('title', this.tooltip.textContent);
+                    document.body.removeChild(this.tooltip);
+                    delete this.tooltip;
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

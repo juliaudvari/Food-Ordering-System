@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Support Request #{{ support_request.id }} - TimeKeeper Cafe{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <h1 class="h3">Support Request #{{ support_request.id }}</h1>
+                <a href="{% url 'cafe:support_request_list' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Support Requests
+                </a>
+            </div>
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">{{ support_request.subject }}</h5>
+                    <span class="badge 
+                        {% if support_request.status == 'OPEN' %}bg-danger
+                        {% elif support_request.status == 'IN_PROGRESS' %}bg-warning text-dark
+                        {% elif support_request.status == 'RESOLVED' %}bg-success
+                        {% else %}bg-secondary{% endif %}">
+                        {{ support_request.get_status_display }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted">Created by {{ support_request.customer.username }} on {{ support_request.created_at|date:"F j, Y, g:i a" }}</small>
+                    </div>
+                    <div class="mb-3">
+                        {{ support_request.description|linebreaks }}
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="h5 mb-3">Messages</h3>
+            
+            {% if support_messages %}
+                <div class="messages">
+                    {% for message in support_messages %}
+                        <div class="card mb-3 {% if message.sender == request.user %}border-primary{% endif %}">
+                            <div class="card-header bg-light">
+                                <strong>{{ message.sender.username }}</strong>
+                                <small class="text-muted float-end">{{ message.created_at|date:"F j, Y, g:i a" }}</small>
+                            </div>
+                            <div class="card-body">
+                                {{ message.message|linebreaks }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">No messages yet.</div>
+            {% endif %}
+            
+            {% if support_request.status != 'CLOSED' %}
+                <div class="card mt-4 shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0">Add a Message</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="{% url 'cafe:support_request_detail' request_id=support_request.id %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Your message</label>
+                                <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-send"></i> Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">Request Details</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5">Status</dt>
+                        <dd class="col-sm-7">{{ support_request.get_status_display }}</dd>
+                        
+                        <dt class="col-sm-5">Created</dt>
+                        <dd class="col-sm-7">{{ support_request.created_at|date:"M d, Y" }}</dd>
+                        
+                        <dt class="col-sm-5">Last Updated</dt>
+                        <dd class="col-sm-7">{{ support_request.updated_at|date:"M d, Y" }}</dd>
+                        
+                        {% if support_request.resolved_at %}
+                            <dt class="col-sm-5">Resolved</dt>
+                            <dd class="col-sm-7">{{ support_request.resolved_at|date:"M d, Y" }}</dd>
+                        {% endif %}
+                        
+                        <dt class="col-sm-5">Customer</dt>
+                        <dd class="col-sm-7">{{ support_request.customer.username }}</dd>
+                        
+                        <dt class="col-sm-5">Assigned To</dt>
+                        <dd class="col-sm-7">
+                            {% if support_request.assigned_to %}
+                                {{ support_request.assigned_to.username }}
+                            {% else %}
+                                <span class="text-muted">Unassigned</span>
+                            {% endif %}
+                        </dd>
+                    </dl>
+                </div>
+                
+                {% if user.is_staff %}
+                    <div class="card-footer">
+                        <form method="post" action="{% url 'cafe:support_request_update' request_id=support_request.id %}">
+                            {% csrf_token %}
+                            
+                            {% if not support_request.assigned_to %}
+                                <button type="submit" name="assign" value="true" class="btn btn-outline-primary btn-sm mb-2 w-100">
+                                    <i class="bi bi-person-check"></i> Assign to Me
+                                </button>
+                            {% endif %}
+                            
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Update Status</label>
+                                <select class="form-select form-select-sm" id="status" name="status">
+                                    {% for status_value, status_name in support_request.STATUS_CHOICES %}
+                                        <option value="{{ status_value }}" {% if support_request.status == status_value %}selected{% endif %}>
+                                            {{ status_name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-sm w-100">
+                                <i class="bi bi-check-circle"></i> Update Status
+                            </button>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

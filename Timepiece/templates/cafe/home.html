@@ -1,0 +1,310 @@
+{% extends 'base.html' %} {% block title %}TimeKeeper Cafe - Home{% endblock %}
+{% block content %}
+<div class="home-container">
+  <!-- Hero Banner -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">TimeKeeper Cafe</h1>
+      <h2 class="hero-subtitle">Where Every Moment is Well Spent</h2>
+      <p class="hero-text">
+        Experience our carefully crafted selection of specialty coffee, gourmet
+        teas, and delicious treats in a unique timepiece-inspired environment.
+      </p>
+      <div class="hero-buttons">
+        <a href="{% url 'cafe:menu' %}" class="btn primary">View Menu</a>
+        <a href="#about" class="btn secondary">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section" id="about">
+    <div class="container">
+      <div class="about-content">
+        <div class="about-image">
+          <img
+            src="{{ MEDIA_URL }}cafe/about.jpg"
+            alt="TimeKeeper Cafe Interior"
+          />
+        </div>
+        <div class="about-text">
+          <h2 class="section-title">About TimeKeeper Cafe</h2>
+          <p>
+            Founded in 2023, TimeKeeper Cafe is a unique coffee shop and eatery
+            inspired by the intricate beauty of timepieces. We've created a
+            space where time slows down, allowing you to savor each moment along
+            with our exceptional menu offerings.
+          </p>
+          <p>
+            Our cafe combines rustic charm with elegant clockwork elements,
+            creating a warm atmosphere where you can escape the rush of everyday
+            life. Every detail, from our handcrafted drinks to our carefully
+            prepared food, reflects our commitment to quality and craftsmanship.
+          </p>
+          <div class="cafe-features">
+            <div class="feature">
+              <div class="feature-icon">
+                <i class="fas fa-coffee"></i>
+              </div>
+              <h3>Premium Coffee</h3>
+              <p>Sustainably sourced and expertly brewed</p>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">
+                <i class="fas fa-leaf"></i>
+              </div>
+              <h3>Specialty Teas</h3>
+              <p>Carefully selected loose leaf teas</p>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">
+                <i class="fas fa-utensils"></i>
+              </div>
+              <h3>Fresh Food</h3>
+              <p>Locally sourced ingredients</p>
+            </div>
+          </div>
+          <a href="{% url 'cafe:about' %}" class="btn secondary">Our Story</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Menu Items -->
+  <section class="featured-section">
+    <div class="container">
+      <h2 class="section-title text-center">Featured Items</h2>
+      <p class="section-subtitle text-center">Our most popular offerings</p>
+
+      <div class="featured-items">
+        {% if featured_items %} {% for item in featured_items %}
+        <div class="featured-item">
+          <a
+            href="{% url 'cafe:menu_item_detail' item.id %}"
+            class="featured-item-link"
+          >
+            <div class="featured-item-image">
+              {% if item.image %}
+              <img src="{{ item.image.url }}" alt="{{ item.name }}" />
+              {% else %}
+              <div class="placeholder-image"></div>
+              {% endif %}
+            </div>
+            <div class="featured-item-info">
+              <h3 class="featured-item-name">{{ item.name }}</h3>
+              <p class="featured-item-desc">
+                {{ item.description|truncatechars:75 }}
+              </p>
+              <div class="featured-item-meta">
+                <span class="featured-item-price">€{{ item.price }}</span>
+                <div class="dietary-tags">
+                  {% if item.is_vegetarian %}
+                  <span class="tag-dot vegetarian" title="Vegetarian"></span>
+                  {% endif %} {% if item.is_vegan %}
+                  <span class="tag-dot vegan" title="Vegan"></span>
+                  {% endif %} {% if item.is_gluten_free %}
+                  <span class="tag-dot gluten-free" title="Gluten Free"></span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        {% endfor %} {% else %}
+        <div class="no-items-message">
+          <p>No featured items available at the moment. Check back soon!</p>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="view-more-container text-center">
+        <a href="{% url 'cafe:menu' %}" class="btn primary">View Full Menu</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Special Offers -->
+  <section class="offers-section">
+    <div class="container">
+      <h2 class="section-title text-center">Special Offers</h2>
+      <p class="section-subtitle text-center">
+        Limited time promotions and seasonal specials
+      </p>
+
+      <div class="offers-container">
+        {% if special_offers %} {% for offer in special_offers %}
+        <div class="offer-card">
+          <div class="offer-card-header">
+            <h3 class="offer-title">{{ offer.title }}</h3>
+            {% if offer.end_date %}
+            <div class="offer-date">
+              <span>Valid until {{ offer.end_date|date:"F d, Y" }}</span>
+            </div>
+            {% endif %}
+          </div>
+          <div class="offer-card-body">
+            <p class="offer-description">{{ offer.description }}</p>
+            {% if offer.discount_percent %}
+            <div class="offer-discount">
+              <span class="discount-value"
+                >{{ offer.discount_percent }}% OFF</span
+              >
+            </div>
+            {% elif offer.discount_amount %}
+            <div class="offer-discount">
+              <span class="discount-value"
+                >€{{ offer.discount_amount }} OFF</span
+              >
+            </div>
+            {% endif %} {% if offer.code %}
+            <div class="promo-code">
+              <span class="code-label">Use code:</span>
+              <span class="code-value">{{ offer.code }}</span>
+            </div>
+            {% endif %}
+          </div>
+          <div class="offer-card-footer">
+            {% if offer.menu_item %}
+            <a
+              href="{% url 'cafe:menu_item_detail' offer.menu_item.id %}"
+              class="btn secondary"
+              >View Item</a
+            >
+            {% else %}
+            <a href="{% url 'cafe:menu' %}" class="btn secondary">Shop Now</a>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %} {% else %}
+        <div class="no-offers-message">
+          <p>
+            No special offers available at the moment. Check back soon for
+            exciting promotions!
+          </p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Hours and Location -->
+  <section class="hours-location-section">
+    <div class="container">
+      <div class="hours-location-container">
+        <div class="hours-card">
+          <h2 class="card-title">Opening Hours</h2>
+          <ul class="hours-list">
+            <li>
+              <span class="day">Monday - Friday:</span>
+              <span class="hours">7:00 AM - 8:00 PM</span>
+            </li>
+            <li>
+              <span class="day">Saturday:</span>
+              <span class="hours">8:00 AM - 9:00 PM</span>
+            </li>
+            <li>
+              <span class="day">Sunday:</span>
+              <span class="hours">9:00 AM - 7:00 PM</span>
+            </li>
+          </ul>
+          <p class="holiday-note">Holiday hours may vary</p>
+        </div>
+
+        <div class="location-card">
+          <h2 class="card-title">Find Us</h2>
+          <address class="location-address">
+            <p>123 Clock Tower Square</p>
+            <p>Dublin 2, D02 A123</p>
+            <p>Ireland</p>
+          </address>
+          <div class="contact-info">
+            <p><i class="fas fa-phone"></i> (01) 555-1234</p>
+            <p><i class="fas fa-envelope"></i> hello@timekeepercafe.com</p>
+          </div>
+          <a
+            href="https://maps.google.com/?q=TimeKeeper+Cafe+Dublin"
+            target="_blank"
+            class="btn secondary"
+            >View Map</a
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Signup -->
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="newsletter-container">
+        <div class="newsletter-content">
+          <h2 class="section-title">Stay Updated</h2>
+          <p>
+            Subscribe to our newsletter for the latest menu updates, special
+            offers, and events.
+          </p>
+        </div>
+        <form
+          class="newsletter-form"
+          method="post"
+          action="{% url 'cafe:newsletter_signup' %}"
+        >
+          {% csrf_token %}
+          <div class="form-group">
+            <input
+              type="email"
+              name="email"
+              placeholder="Your email address"
+              required
+            />
+          </div>
+          <button type="submit" class="btn primary">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        const targetId = this.getAttribute("href");
+        const targetElement = document.querySelector(targetId);
+
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80, // Offset for fixed header
+            behavior: "smooth",
+          });
+        }
+      });
+    });
+
+    // Initialize tooltips for dietary tags
+    const dietaryTags = document.querySelectorAll(".tag-dot");
+    dietaryTags.forEach((tag) => {
+      tag.addEventListener("mouseenter", function () {
+        const title = this.getAttribute("title");
+        if (!title) return;
+
+        const tooltip = document.createElement("div");
+        tooltip.className = "tooltip";
+        tooltip.textContent = title;
+
+        this.appendChild(tooltip);
+        this.tooltip = tooltip;
+      });
+
+      tag.addEventListener("mouseleave", function () {
+        if (this.tooltip) {
+          this.removeChild(this.tooltip);
+          this.tooltip = null;
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}

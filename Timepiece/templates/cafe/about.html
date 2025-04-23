@@ -1,0 +1,194 @@
+{% extends 'base.html' %} {% block title %}About TimeKeeper Cafe{% endblock %}
+{% block content %}
+<div class="about-container">
+  <!-- About Header -->
+  <section class="page-header">
+    <div class="container">
+      <h1 class="page-title">Our Story</h1>
+      <p class="page-subtitle">
+        The history and philosophy behind TimeKeeper Cafe
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Story Section -->
+  <section class="about-story">
+    <div class="container">
+      <div class="story-content">
+        <div class="story-image">
+          <img
+            src="{{ MEDIA_URL }}cafe/about-story.jpg"
+            alt="TimeKeeper Cafe Story"
+            class="img-fluid rounded"
+          />
+        </div>
+        <div class="story-text">
+          <h2>How It All Began</h2>
+          <p>
+            TimeKeeper Cafe was founded in 2023 with a simple vision: to create
+            a space where time slows down. In our fast-paced world, we believe
+            in the importance of savoring moments and appreciating the artistry
+            that goes into everything we serve.
+          </p>
+          <p>
+            Our unique concept was inspired by the intricate beauty of
+            timepieces - precise, handcrafted, and designed with care. Just like
+            a fine watch, every detail in our cafe is thoughtfully considered,
+            from our carefully sourced ingredients to our warm,
+            clockwork-inspired decor.
+          </p>
+          <p>
+            What started as a small passion project has grown into a beloved
+            community space where people gather to enjoy exceptional coffee,
+            delicious food, and most importantly, quality time.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values Section -->
+  <section class="about-values">
+    <div class="container">
+      <h2 class="section-title text-center">Our Values</h2>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <h3>Sustainability</h3>
+          <p>
+            We source our ingredients responsibly, minimize waste, and strive to
+            reduce our environmental footprint in everything we do.
+          </p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">
+            <i class="fas fa-handshake"></i>
+          </div>
+          <h3>Community</h3>
+          <p>
+            We believe in creating a welcoming space for everyone and supporting
+            the local community through partnerships and events.
+          </p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">
+            <i class="fas fa-award"></i>
+          </div>
+          <h3>Quality</h3>
+          <p>
+            We never compromise on the quality of our offerings, from our
+            premium coffee beans to our freshly prepared food.
+          </p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <h3>Mindfulness</h3>
+          <p>
+            We encourage our customers to be present, slow down, and appreciate
+            the moment while enjoying our carefully crafted offerings.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="about-team">
+    <div class="container">
+      <h2 class="section-title text-center">Meet Our Team</h2>
+      <p class="section-subtitle text-center">
+        The passionate people behind TimeKeeper Cafe
+      </p>
+
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="member-photo">
+            <img
+              src="{{ MEDIA_URL }}cafe/team-1.jpg"
+              alt="Team Member"
+              class="img-fluid rounded-circle"
+            />
+          </div>
+          <h3 class="member-name">Emma Clarke</h3>
+          <p class="member-role">Founder & Head Barista</p>
+          <p class="member-bio">
+            With over a decade of experience in specialty coffee, Emma brings
+            her passion for perfect brews to every cup served at TimeKeeper.
+          </p>
+        </div>
+        <div class="team-member">
+          <div class="member-photo">
+            <img
+              src="{{ MEDIA_URL }}cafe/team-2.jpg"
+              alt="Team Member"
+              class="img-fluid rounded-circle"
+            />
+          </div>
+          <h3 class="member-name">Michael Rodriguez</h3>
+          <p class="member-role">Chef</p>
+          <p class="member-bio">
+            Michael creates our delicious menu items, drawing inspiration from
+            global cuisines and focusing on fresh, seasonal ingredients.
+          </p>
+        </div>
+        <div class="team-member">
+          <div class="member-photo">
+            <img
+              src="{{ MEDIA_URL }}cafe/team-3.jpg"
+              alt="Team Member"
+              class="img-fluid rounded-circle"
+            />
+          </div>
+          <h3 class="member-name">Sarah Johnson</h3>
+          <p class="member-role">Pastry Chef</p>
+          <p class="member-bio">
+            Sarah crafts our irresistible pastries and desserts, combining
+            traditional techniques with innovative flavors.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact-section">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h2>Visit Us</h2>
+          <address>
+            <p>
+              <i class="fas fa-map-marker-alt"></i> 123 Clock Tower Square,
+              Dublin 2, D02 A123
+            </p>
+            <p><i class="fas fa-phone"></i> (01) 555-1234</p>
+            <p><i class="fas fa-envelope"></i> hello@timekeepercafe.com</p>
+          </address>
+          <div class="hours">
+            <h3>Opening Hours</h3>
+            <ul>
+              <li><span>Monday - Friday:</span> 7:00 AM - 8:00 PM</li>
+              <li><span>Saturday:</span> 8:00 AM - 9:00 PM</li>
+              <li><span>Sunday:</span> 9:00 AM - 7:00 PM</li>
+            </ul>
+          </div>
+        </div>
+        <div class="contact-map">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2382.1550281670397!2d-6.262149384195371!3d53.34029287997639!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48670e9b76a19ccb%3A0x566ae8c3162384dd!2sDublin%202%2C%20Ireland!5e0!3m2!1sen!2sus!4v1619102758346!5m2!1sen!2sus"
+            width="100%"
+            height="450"
+            style="border: 0"
+            allowfullscreen=""
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
